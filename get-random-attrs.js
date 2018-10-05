@@ -13,6 +13,6 @@ const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) +
 const getRandomAttrs = ({ width, height }) => ({
   x: getRandomInt(0, width),
   y: getRandomInt(0, height),
-  size: getRandomInt(0, 8),
-  color: getRandomColor(),
+  size: getRandomInt(0, 15),
+  color: `rgba(${getRandomInt(0, 255)}, ${getRandomInt(0, 255)}, ${getRandomInt(0, 255)}, ${Math.random()})`,
 });

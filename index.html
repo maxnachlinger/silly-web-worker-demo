@@ -34,7 +34,7 @@
     const { width, height } = canvas;
     const ctx = canvas.getContext('2d');
 
-    drawBgCmds({ color: 'black', width, height })
+    drawBgCmds({ color: 'white', width, height })
       .forEach((c) => c(ctx));
 
     const worker = new Worker('get-circles.js');
