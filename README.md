@@ -1,1 +1,1 @@
-# silly-web-worker-demo
+### A silly web-worker demo
