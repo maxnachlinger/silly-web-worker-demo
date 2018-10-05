@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Simplest Web Worker Demo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas" width="500" height="500"/>
+<div id="messages"></div>
+<script>
+  const drawBgCmds = ({ color, width, height }) => [
+    ((ctx) => ctx.beginPath()),
+    ((ctx) => ctx.rect(0, 0, width, height)),
+    ((ctx) => ctx.fillStyle = color),
+    ((ctx) => ctx.fill()),
+    ((ctx) => ctx.closePath()),
+  ];
+
+  const drawCircleCmds = ({ x, y, color, radius }) => [
+    ((ctx) => ctx.beginPath()),
+    ((ctx) => ctx.arc(x, y, radius, 0, Math.PI * 2, false)),
+    ((ctx) => ctx.fillStyle = color),
+    ((ctx) => ctx.fill()),
+    ((ctx) => ctx.closePath()),
+  ];
+
+  const run = () => {
+    const canvas = document.getElementById('canvas');
+    const { width, height } = canvas;
+    const ctx = canvas.getContext('2d');
+
+    drawBgCmds({ color: 'black', width, height })
+      .forEach((c) => c(ctx));
+
+    const worker = new Worker('get-circles.js');
+    worker.addEventListener('message', (event) => {
+      const { x, y, color, size: radius } = event.data;
+      drawCircleCmds({ x, y, color, radius, ctx })
+        .forEach((c) => c(ctx));
+    });
+
+    // start worker
+    worker.postMessage({ width, height, amountPoints: 5000 });
+  };
+
+  document.addEventListener('DOMContentLoaded', run);
+</script>
+</body>
+</html>
